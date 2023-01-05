@@ -10,6 +10,42 @@
 <body>
     <script src="script.js" defer></script>
 
+    <div class="container">
+        <header>
+            <div class="header-text">
+                Library Project
+            </div>
+        </header>
+    
+        <main>
+            <button data-modal-target="#modal" class="main-button">Add Book</button>
+    
+            <div class="main-book-section">
+                <div class="book-container"></div>
+            </div>
+        </main>
+    
+        <footer></footer>
 
+        <div class="modal" id="modal">
+          <div class="modal-header">
+            <div class="title">Add Book</div>
+            <button data-close-button class="close-button">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form>
+                <input name="title" id="title" type="text" placeholder="Title" required>
+                <input name="author" id="author" type="text" placeholder="Author" required>
+                <input name="pages" id="pages" type="number" placeholder="Pages" required>
+                <input name="read" id="read" type="checkbox">Have you read it yet?
+
+                <input id="submit-button" type="submit"></input>
+            </form>
+          </div>
+        </div>
+
+        <div id="overlay"></div>
+
+    </div>
 </body>
 </html>
