@@ -11,7 +11,7 @@ const bookContainer = document.querySelector(".book-container");
 let titleForm = document.getElementById("title");
 let authorForm = document.getElementById("author");
 let pagesForm = document.getElementById("pages");
-let readForm = document.getElementsByName("read");
+let readForm = document.getElementById("read");
 
 const submitButton = document.getElementById("submit-button");
 
@@ -28,7 +28,15 @@ function addBookToLibrary() {
     let title = titleForm.value;
     let author = authorForm.value;
     let pages = pagesForm.value;
-    let read = readForm.value;
+    let read;
+    
+    if (readForm.checked) {
+      read = true;
+    }
+
+    else {
+      read = false;
+    }
 
     const newBook = new Book(title, author, pages, read);
 
@@ -38,10 +46,12 @@ function addBookToLibrary() {
 function loopArray() {
 
   while (bookContainer.firstChild) {
-    bookContainer.removeChild(bookContainer.lastChild)
+    bookContainer.removeChild(bookContainer.lastChild);
   }
 
   for (let i = 0; i < myLibrary.length; i++) {
+
+    // Object properties
 
     const element = Object.values(myLibrary[i]);
 
@@ -50,15 +60,67 @@ function loopArray() {
     let pages = element[2];
     let read = element[3];
 
-    const bookInfoDisplay = document.createElement("div");
+    // Book title author and pages
 
-    bookInfoDisplay.textContent = `Title: ${title} Author: ${author} Pages: ${pages} Read: ${read}`;
-    bookInfoDisplay.style.cssText = "display: flex; color: white; border: 1px solid red; font-weight: bold;"
+    const bookInfoTitle = document.createElement("div");
+    const bookInfoAuthor = document.createElement("div");
+    const bookInfoPages = document.createElement("div");
+
+    bookInfoTitle.textContent = `${title}`;
+    bookInfoAuthor.textContent = `${author}`;
+    bookInfoPages.textContent = `${pages}`;
+
+    // Book info display
+
+    const bookInfoDisplay = document.createElement("div");
+    bookInfoDisplay.classList.add("book-info-display");
+  
+    // Remove button
 
     const removeButton = document.createElement("button");
 
-    removeButton.style.cssText = "width: 50px; height: 30px;"
+    removeButton.classList.add("remove-button");
+    removeButton.textContent = "Remove";
 
+    // Read change button
+
+    const readChangeButton = document.createElement("button");
+
+    if (read === true) {
+      readChangeButton.classList.add("read-change-button-true");
+      readChangeButton.textContent = "Read";
+    }
+
+    else {
+      readChangeButton.classList.add("read-change-button-false");
+      readChangeButton.textContent = "Not Read"
+    }
+
+    readChangeButton.addEventListener("click", () => {
+      if (read === true) {
+        readChangeButton.classList.remove("read-change-button-true");
+        readChangeButton.classList.add("read-change-button-false");
+
+        read = false;
+        readChangeButton.textContent = "Not Read";
+      }
+  
+      else {
+        readChangeButton.classList.remove("read-change-button-false")
+        readChangeButton.classList.add("read-change-button-true");
+
+        read = true;
+        readChangeButton.textContent = "Read";
+      }
+    })
+
+    // Multiple appends
+
+    bookInfoDisplay.appendChild(bookInfoTitle);
+    bookInfoDisplay.appendChild(bookInfoAuthor);
+    bookInfoDisplay.appendChild(bookInfoPages);
+
+    bookInfoDisplay.appendChild(readChangeButton);
     bookInfoDisplay.appendChild(removeButton);
     bookContainer.appendChild(bookInfoDisplay);
     mainBookSection.appendChild(bookContainer);
@@ -75,12 +137,23 @@ function loopArray() {
   }
 }
 
-submitButton.addEventListener("click", (e) => {
-  e.preventDefault();
-  addBookToLibrary();
-  loopArray();
+// Submit button event
 
-  closeModal(modal);
+submitButton.addEventListener("click", (e) => {
+  if (!titleForm.checkValidity() || !authorForm.checkValidity() || !pagesForm.checkValidity()) {
+    titleForm.reportValidity();
+    authorForm.reportValidity();
+    pagesForm.reportValidity();
+  }
+
+  else {
+    e.preventDefault();
+    addBookToLibrary();
+    loopArray();
+
+    closeModal(modal);
+  }
+  
 })
 
 /* ADD BOOK */
